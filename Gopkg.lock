@@ -115,6 +115,7 @@
   input-imports = [
     "github.com/golang/protobuf/proto",
     "google.golang.org/grpc",
+    "google.golang.org/grpc/credentials",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

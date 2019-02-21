@@ -2,11 +2,11 @@
 
 ## Create a self-signed cert & key for the server
 - In the `server/auth` directory:
-><br>`openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout auth/key.pem -out auth/cert.pem`
+>`openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout auth/key.pem -out auth/cert.pem`
 
 ## Compile the protocol buffer files into Go outputs
 - In the `example` directory:
-><br>`protoc -I protos/ -I ${GOPATH}/src --go_out=plugins=grpc:protos protos/example.proto`
+>`protoc -I protos/ -I ${GOPATH}/src --go_out=plugins=grpc:protos protos/example.proto`
 
 <br>
 <br>
