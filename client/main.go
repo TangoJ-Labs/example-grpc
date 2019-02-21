@@ -15,7 +15,8 @@ import (
 )
 
 const (
-	address = "localhost:4000"
+	address = "example-grpc-server:4000"
+	// address = "docker.for.mac.host.internal:4000"
 )
 
 func main() {
@@ -35,6 +36,7 @@ func main() {
 
 	// create a client connection
 	conn, err := grpc.Dial(address, grpc.WithTransportCredentials(creds))
+	// conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("ERROR: gRPC did not connect: %s\n", err)
 	}
@@ -55,7 +57,7 @@ func main() {
 
 	// Send random integer values and multiples to the server
 	go func() {
-		for i := 1; i <= 30; i++ {
+		for i := 1; i <= 50; i++ {
 
 			// Create a integer message object with random Value and Mutiple
 			intMsg := pb.IntMsg{

@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	port = "localhost:4000"
+	port = "example-grpc-server:4000"
 )
 
 type server struct{}
@@ -68,6 +68,7 @@ func main() {
 
 	// Create a gRPC server object
 	grpcServer := grpc.NewServer(grpc.Creds(creds))
+	// grpcServer := grpc.NewServer()
 
 	// Create a server instance and register the server to receive messages
 	biDirectionalServer := server{}

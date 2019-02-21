@@ -1,0 +1,26 @@
+version: '2'
+
+# The network should already exist, even if this is the first service(s) to start
+networks:
+  example-grpc:
+    external: true
+
+services:
+  example-grpc:
+    container_name: example-grpc-client
+
+    image: grpc/go:1.0
+    
+    environment:
+      - COMPOSE_PROJECT_NAME=example-grpc
+    
+    volumes:
+      - /Users/seanhart/go/src/google.golang.org/grpc:/go/src/google.golang.org/grpc
+      - /Users/seanhart/go/src/github.com/seanbhart/example-grpc:/go/src/github.com/seanbhart/example-grpc
+    
+    # ports:
+    #   - 4001:4001
+    networks:
+      - example-grpc
+    
+    command: /bin/bash -c 'sleep 99999'
