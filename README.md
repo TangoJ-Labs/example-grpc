@@ -2,7 +2,7 @@
 
 ## Compile the protocol buffer files into Go outputs
 - From the "example" directory:
-><br>`protoc -I protos/ -I ${GOPATH}/src --go_out=plugins=grpc:protos protos/example.proto`
+>`protoc -I protos/ -I ${GOPATH}/src --go_out=plugins=grpc:protos protos/example.proto`
 
 <br>
 <br>
