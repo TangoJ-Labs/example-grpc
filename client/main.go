@@ -75,8 +75,8 @@ func main() {
 
 		// Create a integer message object with random Value and Mutiple
 		intMsg := pb.IntMsg{
-			IntValue:    int64(rand.Intn(i)),
-			IntMultiple: int64(rand.Intn(i)),
+			IntValue:    int64(rand.Intn(20)),
+			IntMultiple: int64(rand.Intn(20)),
 		}
 
 		// Send the object
