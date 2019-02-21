@@ -1,11 +1,11 @@
 # gRPC Presentation - Simple w/ Authentication Example
 
 ## Create a self-signed cert & key for the server
-- In the repo root directory:
+In the repo root directory:
 >`openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout auth/key.pem -out auth/cert.pem`
 
 ## Compile the protocol buffer files into Go outputs
-- In the repo root directory:
+In the repo root directory:
 >`protoc -I protos/ -I ${GOPATH}/src --go_out=plugins=grpc:protos protos/example.proto`
 
 <br>
