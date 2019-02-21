@@ -3,11 +3,11 @@ package main
 import (
 	"context"
 	"crypto/x509"
-	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
-	"os"
-	"strconv"
+	"math/rand"
+	"time"
 
 	pb "github.com/seanbhart/example-grpc/protos"
 	"google.golang.org/grpc"
@@ -19,6 +19,9 @@ const (
 )
 
 func main() {
+
+	//=====================================
+	//=============== SETUP ===============
 
 	// Read cert file
 	pem, _ := ioutil.ReadFile("auth/cert.pem")
@@ -33,28 +36,74 @@ func main() {
 	// create a client connection
 	conn, err := grpc.Dial(address, grpc.WithTransportCredentials(creds))
 	if err != nil {
-		log.Fatalf("gRPC did not connect: %s\n", err)
+		log.Fatalf("ERROR: gRPC did not connect: %s\n", err)
 	}
 	defer conn.Close()
 
-	// Extract the counter starting argument (as a string)
-	if len(os.Args) < 2 {
-		log.Fatalln("Please include an integer argument as the counter starting point.")
-	}
-	arg := os.Args[1]
+	//=============== SETUP ===============
+	//=====================================
 
-	// Covert the passed argument to int64
-	intStart, err := strconv.ParseInt(arg, 10, 64)
+	// create stream
+	client := pb.NewBiDirectionalClient(conn)
+	stream, err := client.Multiple(context.Background())
 	if err != nil {
-		log.Fatalf("That argument is not an integer.  Please try again.  Error: %s\n", err)
+		log.Fatalf("ERROR opening sream: %v", err)
 	}
 
-	// send the counter
-	dataClient := pb.NewIterateCounterClient(conn)
-	dataResponse, err := dataClient.Iterate(context.Background(), &pb.Data{Counter: intStart})
-	if err != nil {
-		log.Fatalf("Error when calling IterateCounter: %s\n", err)
-	}
+	ctx := stream.Context()
+	waitc := make(chan struct{})
 
-	fmt.Printf("New counter value: %d\n", dataResponse.Counter)
+	// Send random integer values and multiples to the server
+	go func() {
+		for i := 1; i <= 30; i++ {
+
+			// Create a integer message object with random Value and Mutiple
+			intMsg := pb.IntMsg{
+				IntValue:    int64(rand.Intn(i)),
+				IntMultiple: int64(rand.Intn(i)),
+			}
+
+			// Send the object
+			err := stream.Send(&intMsg)
+			if err != nil {
+				log.Fatalf("ERROR sending: %v", err)
+			}
+			log.Printf("Sent Value * Mutiple: %d * %d", intMsg.IntValue, intMsg.IntMultiple)
+
+			// Delay to allow human viewing of processes
+			time.Sleep(time.Millisecond * 200)
+		}
+		err := stream.CloseSend()
+		if err != nil {
+			log.Println(err)
+		}
+	}()
+
+	// Receive calculation responses
+	go func() {
+		for {
+			intMsg, err := stream.Recv()
+			if err == io.EOF {
+				close(waitc)
+				return
+			}
+			if err != nil {
+				log.Fatalf("ERROR receiving: %v", err)
+			}
+			log.Printf("*** CALC: %d * %d = %d ***", intMsg.IntValue, intMsg.IntMultiple, intMsg.IntCalc)
+		}
+	}()
+
+	// Wait for the context to be finished, then close the channel
+	go func() {
+		<-ctx.Done()
+		err := ctx.Err()
+		if err != nil {
+			log.Println(err)
+		}
+		close(waitc)
+	}()
+
+	<-waitc
+	log.Println("FINISHED")
 }

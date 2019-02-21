@@ -1,10 +1,12 @@
 syntax = "proto3";
 package example;
 
-message Data {
-  int64 Counter = 1;
+message IntMsg {
+  int64 IntValue = 1;
+  int64 IntMultiple = 2;
+  int64 IntCalc = 3;
 }
 
-service IterateCounter {
-  rpc Iterate(Data) returns (Data) {}
+service BiDirectional {
+  rpc Multiple(stream IntMsg) returns (stream IntMsg) {}
 }

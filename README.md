@@ -1,4 +1,4 @@
-# gRPC Presentation - Simple w/ Authentication Example
+# gRPC Presentation - Stream (Bidirectional)
 
 ## Create a self-signed cert & key for the server
 In the repo root directory:
@@ -18,12 +18,13 @@ In the repo root directory:
 Server
 >`go run server/main.go`
 
-The server terminal should block and listen on the port
+The server terminal should block and listen on the port.
 
 <br>
 
 Client
 >`go run client/main.go`
 
-The client terminal should run the program (and complete), and output "New counter value: {input int + 1}"
-The server terminal should output "Counter value: {input int}"
+The client terminal will run the program and stream back responses from the server.
+The server terminal will output some calculation logs.
+The client terminal will display "FINISHED" when complete.

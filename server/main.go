@@ -1,10 +1,12 @@
+// See https://github.com/grpc/grpc-go for similar
+
 package main
 
 import (
-	"context"
-	"fmt"
+	"io"
 	"log"
 	"net"
+	"time"
 
 	pb "github.com/seanbhart/example-grpc/protos"
 	"google.golang.org/grpc"
@@ -17,39 +19,66 @@ const (
 
 type server struct{}
 
-func (s *server) Iterate(ctx context.Context, data *pb.Data) (*pb.Data, error) {
+func (s *server) Multiple(stream pb.BiDirectional_MultipleServer) error {
 
-	fmt.Printf("Counter value: %d\n", data.Counter)
+	// Keep the Mutiple server open to receive and send
+	for {
+		// Receive the incoming integer message object
+		intMsg, err := stream.Recv()
+		if err == io.EOF {
+			return nil
+		}
+		if err != nil {
+			return err
+		}
 
-	// iterate the counter and return
-	data.Counter = data.Counter + 1
-	return data, nil
+		// Multiply the Value integer by the Multiple integer and add it to the object
+		intCalc := intMsg.IntValue * intMsg.IntMultiple
+		intMsg.IntCalc = intCalc
+
+		// Delay to demonstrate the bidirectional streaming
+		time.Sleep(time.Millisecond * 700)
+
+		// Send the integer message object back to the client
+		log.Printf("Sending response: %d * %d = %d", intMsg.IntValue, intMsg.IntMultiple, intMsg.IntCalc)
+		err = stream.Send(intMsg)
+		if err != nil {
+			return err
+		}
+	}
 }
 
 // main starts a gRPC server and waits for connection
 func main() {
+
+	//=====================================
+	//=============== SETUP ===============
+
 	// Create a listener on TCP port
 	listener, err := net.Listen("tcp", port)
 	if err != nil {
-		log.Fatalf("Error when creating TransportCredentials: %v\n", err)
+		log.Fatalf("ERROR when creating TransportCredentials: %v\n", err)
 	}
 
 	// Create TransportCredentials
 	creds, err := credentials.NewServerTLSFromFile("auth/cert.pem", "auth/key.pem")
 	if err != nil {
-		log.Fatalf("failed to serve: %s\n", err)
+		log.Fatalf("ERROR: Failed to serve: %s\n", err)
 	}
 
 	// Create a gRPC server object
 	grpcServer := grpc.NewServer(grpc.Creds(creds))
 
 	// Create a server instance and register the server to receive messages
-	dataServer := server{}
-	pb.RegisterIterateCounterServer(grpcServer, &dataServer)
+	biDirectionalServer := server{}
+	pb.RegisterBiDirectionalServer(grpcServer, &biDirectionalServer)
 
 	// Start the gRPC listener
 	err = grpcServer.Serve(listener)
 	if err != nil {
-		log.Fatalf("failed to serve: %s\n", err)
+		log.Fatalf("ERROR: Failed to serve: %s\n", err)
 	}
+
+	//=============== SETUP ===============
+	//=====================================
 }
