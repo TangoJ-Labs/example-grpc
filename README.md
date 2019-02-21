@@ -25,9 +25,9 @@ In the repo root directory:
 
 Server
 >`docker-compose -f server/docker-compose.yaml up -d`
->`docker exec -it example-grpc-server bash`
->`cd /go/src/github.com/seanbhart/example-grpc`
->`go run server/main.go`
+><br>`docker exec -it example-grpc-server bash`
+><br>`cd /go/src/github.com/seanbhart/example-grpc`
+><br>`go run server/main.go`
 
 The server terminal should block and listen on the port.
 
@@ -35,9 +35,9 @@ The server terminal should block and listen on the port.
 
 Client
 >`docker-compose -f client/docker-compose.yaml up -d`
->`docker exec -it example-grpc-client bash`
->`cd /go/src/github.com/seanbhart/example-grpc`
->`go run client/main.go`
+><br>`docker exec -it example-grpc-client bash`
+><br>`cd /go/src/github.com/seanbhart/example-grpc`
+><br>`go run client/main.go`
 
 The client terminal will run the program and stream back responses from the server.
 The server terminal will output some calculation logs.
