@@ -1,15 +1,19 @@
-# gRPC Presentation - Simple Example
+# gRPC Presentation - Simple w/ Authentication Example
+
+## Create a self-signed cert & key for the server
+- In the `server/auth` directory:
+><br>`openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout auth/key.pem -out auth/cert.pem`
 
 ## Compile the protocol buffer files into Go outputs
-- From the repo parent directory:
->`protoc -I protos/ -I ${GOPATH}/src --go_out=plugins=grpc:protos protos/example.proto`
+- In the `example` directory:
+><br>`protoc -I protos/ -I ${GOPATH}/src --go_out=plugins=grpc:protos protos/example.proto`
 
 <br>
 <br>
 
 
 ## Run the Example
-- From the repo parent directory:
+- In the `example` directory:
 Server
 >`go run server/main.go`
 
@@ -20,5 +24,5 @@ The server terminal should block and listen on the port
 Client
 >`go run client/main.go`
 
-The client terminal should run the program (and complete), and output "New counter value: 2"
-The server terminal should output "Counter value: 1"
+The client terminal should run the program (and complete), and output "New counter value: {input int + 1}"
+The server terminal should output "Counter value: {input int}"

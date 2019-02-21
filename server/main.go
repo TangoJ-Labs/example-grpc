@@ -8,10 +8,11 @@ import (
 
 	pb "github.com/seanbhart/example-grpc/protos"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 )
 
 const (
-	port = ":4000"
+	port = "localhost:4000"
 )
 
 type server struct{}
@@ -30,11 +31,17 @@ func main() {
 	// Create a listener on TCP port
 	listener, err := net.Listen("tcp", port)
 	if err != nil {
-		log.Fatalf("failed to listen: %v\n", err)
+		log.Fatalf("Error when creating TransportCredentials: %v\n", err)
+	}
+
+	// Create TransportCredentials
+	creds, err := credentials.NewServerTLSFromFile("auth/cert.pem", "auth/key.pem")
+	if err != nil {
+		log.Fatalf("failed to serve: %s\n", err)
 	}
 
 	// Create a gRPC server object
-	grpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer(grpc.Creds(creds))
 
 	// Create a server instance and register the server to receive messages
 	dataServer := server{}
