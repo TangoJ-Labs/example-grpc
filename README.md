@@ -10,6 +10,7 @@ From the repo root directory:
 
 ## Run the Example
 From the repo root directory:
+
 Server
 >`go run server/main.go`
 
