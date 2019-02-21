@@ -1,7 +1,7 @@
 # gRPC Presentation - Simple Example
 
 ## Compile the protocol buffer files into Go outputs
-- From the "example" directory:
+- From the repo parent directory:
 >`protoc -I protos/ -I ${GOPATH}/src --go_out=plugins=grpc:protos protos/example.proto`
 
 <br>
@@ -9,7 +9,7 @@
 
 
 ## Run the Example
-- From the "example" directory:
+- From the repo parent directory:
 Server
 >`go run server/main.go`
 
