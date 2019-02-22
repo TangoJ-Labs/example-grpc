@@ -5,6 +5,7 @@ package main
 import (
 	"context"
 	"crypto/x509"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
@@ -60,6 +61,7 @@ func main() {
 		for {
 			intMsg, err := stream.Recv()
 			if err == io.EOF {
+				fmt.Println("EOF")
 				close(waitc)
 				return
 			}
@@ -89,6 +91,7 @@ func main() {
 		// Delay to allow human viewing of processes
 		time.Sleep(time.Millisecond * 200)
 	}
+	fmt.Println("CloseSend")
 	err = stream.CloseSend()
 	if err != nil {
 		log.Println(err)
