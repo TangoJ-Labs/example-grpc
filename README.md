@@ -1,8 +1,10 @@
-# gRPC Presentation - Simple w/ Authentication Example
+# gRPC Example - Simple w/ Authentication
 
 ## Create a self-signed cert & key for the server
 In the repo root directory:
 >`openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout auth/key.pem -out auth/cert.pem`
+
+**!!! NOTE: Be sure to put the server address in the cert Common Name field (e.g. "localhost") !!!**
 
 ## Compile the protocol buffer files into Go outputs
 In the repo root directory:
@@ -17,13 +19,11 @@ In the repo root directory:
 
 Server
 >`go run server/main.go`
-
-The server terminal should block and listen on the port
+- The server terminal should block and listen on the port
 
 <br>
 
 Client
 >`go run client/main.go`
-
-The client terminal should run the program (and complete), and output "New counter value: {input int + 1}"
-The server terminal should output "Counter value: {input int}"
+- The client terminal should run the program (and complete), and output "New counter value: {input int + 1}"
+- The server terminal should output "Counter value: {input int}"
