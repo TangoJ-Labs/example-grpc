@@ -31,7 +31,7 @@ Server
 ><br>`cd /go/src/github.com/seanbhart/example-grpc`
 ><br>`go run server/main.go`
 
-The server terminal should block and listen on the port.
+- The server terminal should block and listen on the port.
 
 <br>
 
@@ -41,7 +41,7 @@ Client
 ><br>`cd /go/src/github.com/seanbhart/example-grpc`
 ><br>`go run client/main.go`
 
-The client terminal will run the program and stream back responses from the server.
-<br>The server terminal will output some calculation logs.
-<br>The client will send the signal to close the stream "CloseSend" when it is finished streaming data, but the server will continue to respond on the stream until it finishes handling all the data it received (it won't handle the EOF error the client sends until after the other data).  It will then issue an EOF error to the client to indicate it is safe to terminate the client processes. Look for the "CloseSend" and "EOF" outputs in the terminal.
-<br>The client terminal will display "FINISHED" when complete.
+- The client terminal will run the program and stream back responses from the server.
+- The server terminal will output some calculation logs.
+- The client will send the signal to close the stream "CloseSend" when it is finished streaming data, but the server will continue to respond on the stream until it finishes handling all the data it received (it won't handle the EOF error the client sends until after the other data).  It will then issue an EOF error to the client to indicate it is safe to terminate the client processes. Look for the "CloseSend" and "EOF" outputs in the terminal.
+- The client terminal will display "FINISHED" when complete.

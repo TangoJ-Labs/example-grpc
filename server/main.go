@@ -60,13 +60,13 @@ func main() {
 	// Create a listener on TCP port
 	listener, err := net.Listen("tcp", port)
 	if err != nil {
-		log.Fatalf("ERROR when creating TransportCredentials: %v\n", err)
+		log.Fatalf("ERROR when creating Listener: %v\n", err)
 	}
 
 	// Create TransportCredentials
 	creds, err := credentials.NewServerTLSFromFile("auth/cert.pem", "auth/key.pem")
 	if err != nil {
-		log.Fatalf("ERROR: Failed to serve: %s\n", err)
+		log.Fatalf("ERROR when creating TransportCredentials: %s\n", err)
 	}
 
 	// Create a gRPC server object
