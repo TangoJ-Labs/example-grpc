@@ -65,7 +65,7 @@ func main() {
 	dataClient := pb.NewIterateCounterClient(conn)
 	dataResponse, err := dataClient.Iterate(context.Background(), &pb.Data{Counter: intStart})
 	if err != nil {
-		log.Fatalf("Error when calling IterateCounter: %s\n", err)
+		log.Fatalf("Error when calling Iterate: %s\n", err)
 	}
 
 	// Ouput the response from the server (the Counter value should have increased by 1)
