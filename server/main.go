@@ -20,17 +20,21 @@ func (s *server) Iterate(ctx context.Context, data *pb.Data) (*pb.Data, error) {
 
 	fmt.Printf("Counter value: %d\n", data.Counter)
 
-	// iterate the counter and return
+	// Increase the Counter value by 1 and return
 	data.Counter = data.Counter + 1
 	return data, nil
 }
 
 // main starts a gRPC server and waits for connection
 func main() {
+
+	//=====================================
+	//=============== SETUP ===============
+
 	// Create a listener on TCP port
 	listener, err := net.Listen("tcp", port)
 	if err != nil {
-		log.Fatalf("failed to listen: %v\n", err)
+		log.Fatalf("Error when creating Listener: %v\n", err)
 	}
 
 	// Create a gRPC server object
@@ -40,9 +44,12 @@ func main() {
 	dataServer := server{}
 	pb.RegisterIterateCounterServer(grpcServer, &dataServer)
 
-	// Start the gRPC listener
+	// Start the gRPC server to listen on the port
 	err = grpcServer.Serve(listener)
 	if err != nil {
-		log.Fatalf("failed to serve: %s\n", err)
+		log.Fatalf("Error when Serving: %s\n", err)
 	}
+
+	//=============== SETUP ===============
+	//=====================================
 }

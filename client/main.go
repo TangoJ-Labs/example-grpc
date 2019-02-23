@@ -15,7 +15,10 @@ const (
 
 func main() {
 
-	// create a client connection
+	//=====================================
+	//=============== SETUP ===============
+
+	// Connect to the server
 	var conn *grpc.ClientConn
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
@@ -23,12 +26,16 @@ func main() {
 	}
 	defer conn.Close()
 
-	// send the counter
+	//=============== SETUP ===============
+	//=====================================
+
+	// Call the rpc Iterate method and pass the Counter in a new Data object
 	dataClient := pb.NewIterateCounterClient(conn)
 	dataResponse, err := dataClient.Iterate(context.Background(), &pb.Data{Counter: 1})
 	if err != nil {
-		log.Fatalf("Error when calling IterateCounter: %s\n", err)
+		log.Fatalf("Error when calling Iterate: %s\n", err)
 	}
 
+	// Ouput the response from the server (the Counter value should have increased by 1)
 	fmt.Printf("New counter value: %d\n", dataResponse.Counter)
 }
