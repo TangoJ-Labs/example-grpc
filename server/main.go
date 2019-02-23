@@ -26,13 +26,15 @@ func (s *server) Multiple(stream pb.BiDirectional_MultipleServer) error {
 		// Receive the incoming integer message object
 		intMsg, err := stream.Recv()
 		if err == io.EOF {
+			// The server will receive an end of file error when the client is finished streaming data
+			// Return nil to exit and close the server-side stream
 			return nil
 		}
 		if err != nil {
 			return err
 		}
 
-		// Multiply the Value integer by the Multiple integer and add it to the object
+		// Multiply the Value integer by the Multiple integer and add the product to the object
 		intCalc := intMsg.IntValue * intMsg.IntMultiple
 		intMsg.IntCalc = intCalc
 
@@ -73,7 +75,7 @@ func main() {
 	biDirectionalServer := server{}
 	pb.RegisterBiDirectionalServer(grpcServer, &biDirectionalServer)
 
-	// Start the gRPC listener
+	// Start the gRPC server to listen on the port
 	err = grpcServer.Serve(listener)
 	if err != nil {
 		log.Fatalf("ERROR: Failed to serve: %s\n", err)
