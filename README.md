@@ -1,3 +1,5 @@
+**CHECK OUT THE OTHER BRANCHES FOR OTHER EXAMPLE VERSIONS!**
+
 # gRPC - Simple Example
 
 ## Compile the protocol buffer files into Go outputs
